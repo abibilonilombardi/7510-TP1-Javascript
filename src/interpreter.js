@@ -64,18 +64,13 @@ var Interpreter = function () {
     var RuleParser = new Parser(db, /([a-zA-Z\s]*)\([a-zA-Z\s,]*\)\s*\:\-([a-zA-Z,()\s]*\))\.$/);
     
     mapaFacts.CargarMapa(FactParser.parsearLista());
-    console.log("sdjsbfkajsvk");
-    console.log(mapaFacts.aMap);
     mapaRules.CargarMapa(RuleParser.parsearLista());
-    console.log(mapaRules.aMap);
   }
   
   var Reemplazar = function (cadena, valoresAReemplazar, valoresDeReemplazo){
     var cadenaFinal = cadena;
-    // console.log(cadena);
     for (i = 0; i < valoresDeReemplazo.length ; i++){
         cadenaFinal = cadenaFinal.replace(new RegExp(valoresAReemplazar[i], 'g'),valoresDeReemplazo[i],"g");
-        // console.log(cadenaFinal)
       }
     return cadenaFinal;
   }
@@ -83,17 +78,13 @@ var Interpreter = function () {
   var queryArray = function(stringQuery){
     var q = new Parser(stringQuery, /([a-zA-Z]*)\(([a-zA-Z\s,]*)\)\s*[\.|\:]?/);
     var vec = q.parsearString();
-    // console.log(vec);
     return vec;
   }
   
   var checkearFacts= function(ClaveValor){
-      console.log(ClaveValor);
         if (mapaFacts.obtenerValores(ClaveValor[0]).indexOf(ClaveValor[1])!= -1){
-          console.log("lo contiene");
           return true;
         }else{
-          console.log("NO lo contiene");
           return false;}
     }
 
@@ -105,25 +96,18 @@ var Interpreter = function () {
   this.checkQuery = function (query) {
     var vec = queryArray(query);
     
-    // this.parseDB(db);
-    
     if (mapaRules.contieneClave(vec[0])){ 
-      console.log("es rule");
       cadenaFacts =  Reemplazar(mapaRules.aMap[vec[0]][0],mapaFacts.aMap[vec[0]][0].split(/[^a-zA-Z]/),vec[1].split(/[^a-zA-Z]/));
       return chekearRule( cadenaFacts);
       
     }else{
       if (mapaFacts.contieneClave(vec[0])){
-          console.log("es fact");
           return checkearFacts(vec);
       }else{
-        console.log("NO ES NINGUNA");
         return false;}}
       
     
   }
-  // return checkQuery("hijo(pepe, juan)");
-  // return checkQuery('hijo(pepe, juan)');
 }
 
 module.exports = Interpreter;
